@@ -7,7 +7,16 @@ def home_view(request, *args, **kwargs):
     print(args, kwargs)
     # return HttpResponse("<h1>Hello world!!</h1>")
     return render(request, 'pages/home.html', context = {}, status=200)
-0
+
+def tweet_list_view(request, *args, **kwargs):
+    qs = Tweet.objects.all()
+    print(qs)
+    tweets = [{"id": x.id, "content": x.content} for x in qs]
+    data = {
+        'response': tweets
+    }
+    return JsonResponse(data, status=200)
+
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
     print(args, kwargs)
     status = 200
