@@ -1,12 +1,22 @@
 from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from tweets.models import Tweet
-
+from tweets.forms import TweetForm
 # Create your views here.
 def home_view(request, *args, **kwargs):
     print(args, kwargs)
     # return HttpResponse("<h1>Hello world!!</h1>")
     return render(request, 'pages/home.html', context = {}, status=200)
+
+def tweet_create_view(req, *args, **kwargs):
+    form = TweetForm(req.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        #can do other form related logic shere
+        obj.save()
+        return redirect('/')
+        form = TweetForm()
+    return render(req, 'components/form.html', context = {"form": form})
 
 def tweet_list_view(request, *args, **kwargs):
     qs = Tweet.objects.all()
